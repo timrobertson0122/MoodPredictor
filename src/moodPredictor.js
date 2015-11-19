@@ -1,18 +1,20 @@
-var happyWords = "delight, delighted, delightful, happy, glad, joy, joyful, merry, pleasant";
-var sadWords = "disappointed, miserable, sad, sorrow, unhappy";
-var textInput = '';
-var inputArray = [];
-var happyArray = [];
-var sadArray = [];
-var happyMatch = [];
-var sadMatch = [];
-
-var wordsToArray = function(str) {
-    str = str.replace(/["',.]/g, '').split(' ');
-    return str;
+function MoodPredictor() {
+    this.happyWords = "delight, delighted, delightful, happy, glad, joy, joyful, merry, pleasant";
+    this.sadWords = "disappointed, miserable, sad, sorrow, unhappy";
+    this.textInput = '';
+    this.inputArray = [];
+    this.happyArray = [];
+    this.sadArray = [];
+    this.happyMatch = [];
+    this.sadMatch = [];
 };
 
-var matchingWords = function(arr, arr2) {
+MoodPredictor.prototype.wordsToArray = function(str) {
+    this.arr = str.replace(/["',.]/g, '').split(' ');
+    return this.arr;
+};
+
+MoodPredictor.prototype.matchingWords = function(arr, arr2) {
     var ret = [];
     arr.sort();
     arr2.sort();
@@ -24,7 +26,7 @@ var matchingWords = function(arr, arr2) {
     return ret;
 };
 
-var happySadOrUnknown = function(count1, count2) {
+MoodPredictor.prototype.happySadOrUnknown = function(count1, count2) {
     if ((count1 > 0) && count1 >= (count2 * 2)) {
         result = "You seem Happy!"
         var image = document.getElementById('resultImage')
@@ -39,23 +41,3 @@ var happySadOrUnknown = function(count1, count2) {
         image.src = 'img/unknown.png'
     }
 };
-
-$(document).ready(function() {
-
-    happyArray = wordsToArray(happyWords);
-    sadArray = wordsToArray(sadWords);
-
-    $('#input').on("click", function(evnt) {
-        textInput = $('textarea#message').val().toLowerCase();
-        inputArray = wordsToArray(textInput);
-        happyMatch = matchingWords(inputArray, happyArray);
-        countHappy = happyMatch.length;
-        sadMatch = matchingWords(inputArray, sadArray);
-        countSad = sadMatch.length;
-        happySadOrUnknown(countHappy, countSad);
-        $('#result').text(result);
-        console.log("Happy words found:" + " " + countHappy)
-        console.log("Sad words found:" + " " + countSad)
-        evnt.preventDefault();
-    });
-});
