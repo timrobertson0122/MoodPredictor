@@ -1,0 +1,9 @@
+#result {
+  width: 100px;
+  height: 100px;
+  float: left;
+}
+
+.unknown {
+  background-color: green;
+}
