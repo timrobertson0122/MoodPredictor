@@ -1,12 +1,16 @@
 function MoodPredictor() {
     this.HAPPY_WORDS = "delight, delighted, delightful, happy, glad, joy, joyful, merry, pleasant";
     this.SAD_WORDS = "disappointed, miserable, sad, sorrow, unhappy";
-    this.textInput = '';
+    this.happyResult = "You seem happy!"
+    this.sadResult = "Oh no, so sad - cheer up!"
+    this.unknownResult = "Hmm, our sophisticated word matching system can't figure that out, can you elaborate?!"
     this.inputArray = [];
     this.happyArray = [];
     this.sadArray = [];
     this.happyMatch = [];
     this.sadMatch = [];
+    this.countHappy = 0;
+    this.countSad = 0;   
 };
 
 MoodPredictor.prototype.wordsToArray = function(str) {
@@ -15,92 +19,37 @@ MoodPredictor.prototype.wordsToArray = function(str) {
 };
 
 MoodPredictor.prototype.matchingWords = function(arr, arr2) {
-    var ret = [];
+    var res = [];
     arr.sort();
     arr2.sort();
     for (var i = 0; i < arr.length; i += 1) {
         if (arr2.indexOf(arr[i]) > -1) {
-            ret.push(arr[i]);
+            res.push(arr[i]);
         }
     }
-    return ret;
+    return res;
 };
 
-MoodPredictor.prototype.getText = function() {
-    this.textInput = $('textarea#message').val().toLowerCase();
-};
-
-MoodPredictor.prototype.inputToArray = function() {
-    var inputArray = moodpredictor.wordsToArray(this.textInput);
-    return inputArray;
-};
-
-       // function matchHappyWords() {
-       //  var happyMatch = moodpredictor.matchingWords(inputArray, happyArray);
-       //  return happyMatch;
-       // };
-
-       // function matchSadWords() {
-       //  var sadMatch = moodpredictor.matchingWords(inputArray, sadArray);
-       //  return sadMatch;
-       // };
-
-       // function countHappyWords() {
-       //  var countHappy = happyMatch.length;
-       //  return countHappy;
-       // };
-
-       // function countSadWords() { 
-       //  var countSad = sadMatch.length;
-       //  return countSad;
-       // };
-
-       // function returnResult() {
-       //  $('#result').attr('class', moodpredictor.isHappySadOrUnknown());
-       // };
-
-MoodPredictor.prototype.isHappySadOrUnknown = function() {
-    if (this.isHappy()) {
-        console.log('happy');
-        return 'happy';
-    } 
-    if (this.isSad()) {
-        console.log('sad');
-        return 'sad';
-    } 
-    console.log('unknown');
-    return 'unknown';
-};
-
-MoodPredictor.prototype.isHappy = function(count1, count2) {
+MoodPredictor.prototype.isHappySadOrUnknown = function(count1, count2) {
     if ((count1 > 0) && count1 >= (count2 * 2)) {
-        return true;
+        return this.happyResult;
+    } else if ((count2 > 0) && count2 >= (count1 * 2)) {
+        return this.sadResult;
+    } else {
+        return this.unknownResult;
     }
 };
 
-MoodPredictor.prototype.isSad = function(count1, count2) {
-    if ((count2 > 0) && count2 >= (count1 * 2)) {
-    }
+MoodPredictor.prototype.calculateMood = function() {
+    var happyArray = this.wordsToArray(this.HAPPY_WORDS);
+    var sadArray = this.wordsToArray(this.SAD_WORDS);
+    var inputArray = this.wordsToArray(textInput);
+    var happyMatch = this.matchingWords(inputArray, happyArray);
+    var sadMatch = this.matchingWords(inputArray, sadArray);
+    var countHappy = happyMatch.length;
+    var countSad = sadMatch.length;
+    console.log("Happy words found:" + " " + countHappy)
+    console.log("Sad words found:" + " " + countSad)
+    var outcome = this.isHappySadOrUnknown(countHappy,countSad);
+    return outcome;
 };
-
-// MoodPredictor.prototype.returnResult = function() {
-//     // $('#result').text(result);
-//     console.log(isHappySadOrUnknown);
-    
-// }
-
-// MoodPredictor.prototype.isHappySadOrUnknown = function(count1, count2) {
-//     if ((count1 > 0) && count1 >= (count2 * 2)) {
-//         result = "You seem Happy!"
-//         var image = document.getElementById('resultImage')
-//         image.src = 'img/happy.png'
-//     } else if ((count2 > 0) && count2 >= (count1 * 2)) {
-//         result = "Feeling Sad huh?";
-//         var image = document.getElementById('resultImage')
-//         image.src = 'img/sad.png'
-//     } else {
-//         result = "hmmm, we're going to call this 'Unknown'";
-//         var image = document.getElementById('resultImage')
-//         image.src = 'img/unknown.png'
-//     }
-// };
