@@ -1,9 +1,11 @@
 function MoodPredictor() {
     this.HAPPY_WORDS = "delight, delighted, delightful, happy, glad, joy, joyful, merry, pleasant";
     this.SAD_WORDS = "disappointed, miserable, sad, sorrow, unhappy";
-    this.happyResult = "You seem happy!"
-    this.sadResult = "Oh no, so sad - cheer up!"
-    this.unknownResult = "Hmm, our sophisticated word matching system can't figure that out, can you elaborate?!"
+    this.happyResult = "HAPPY - You seem happy!"
+    this.sadResult = "SAD - Oh no, so sad - cheer up!"
+    this.unknownResult = "UKNOWN - Hmm, our sophisticated word matching system can't figure that out, can you elaborate?!"
+    this.noResult = "Please enter some text."
+    this.textInput = '';
     this.inputArray = [];
     this.happyArray = [];
     this.sadArray = [];
@@ -19,25 +21,35 @@ MoodPredictor.prototype.wordsToArray = function(str) {
 };
 
 MoodPredictor.prototype.matchingWords = function(arr, arr2) {
-    var res = [];
+    this.res = [];
     arr.sort();
     arr2.sort();
     for (var i = 0; i < arr.length; i += 1) {
         if (arr2.indexOf(arr[i]) > -1) {
-            res.push(arr[i]);
+            this.res.push(arr[i]);
         }
     }
-    return res;
+    return this.res;
 };
 
-MoodPredictor.prototype.isHappySadOrUnknown = function(count1, count2) {
-    if ((count1 > 0) && count1 >= (count2 * 2)) {
-        return this.happyResult;
-    } else if ((count2 > 0) && count2 >= (count1 * 2)) {
-        return this.sadResult;
-    } else {
-        return this.unknownResult;
+MoodPredictor.prototype.noTextEntered = function() {
+    if (this.textInput = '') {
+        return true;
     }
+};
+
+MoodPredictor.prototype.isHappySadOrUnknown = function(count1, count2, text) {
+    if (text != '') {
+        if ((count1 > 0) && count1 >= (count2 * 2)) {
+            return this.happyResult;
+        } else if ((count2 > 0) && count2 >= (count1 * 2)) {
+            return this.sadResult;
+        } else {
+            return this.unknownResult;
+        }  
+    } else {
+        return this.noResult;
+    };
 };
 
 MoodPredictor.prototype.calculateMood = function() {
@@ -50,6 +62,7 @@ MoodPredictor.prototype.calculateMood = function() {
     var countSad = sadMatch.length;
     console.log("Happy words found:" + " " + countHappy)
     console.log("Sad words found:" + " " + countSad)
-    var outcome = this.isHappySadOrUnknown(countHappy,countSad);
+    var outcome = this.isHappySadOrUnknown(countHappy,countSad, textInput);
+    console.log(textInput)
     return outcome;
 };

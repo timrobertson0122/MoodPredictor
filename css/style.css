@@ -4,6 +4,14 @@
   float: left;
 }
 
-.unknown {
+.HAPPY {
   background-color: green;
+}
+
+.SAD {
+  background-color: red;
+}
+
+.UNKNOWN {
+  background-color: gray;
 }
